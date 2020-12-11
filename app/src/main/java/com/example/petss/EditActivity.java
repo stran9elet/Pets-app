@@ -162,43 +162,50 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
-
+                String petName = mNameEditText.getText().toString().trim();
+                String petBreed = mBreedEditText.getText().toString().trim();
+                String weightString = mWeightEditText.getText().toString().trim();
                 if (uri == null) {
-                    String petName = mNameEditText.getText().toString().trim();
-                    String petBreed = mBreedEditText.getText().toString().trim();
-                    String weightString = mWeightEditText.getText().toString().trim();
+
 
                     ContentValues values = new ContentValues();
+                    if(petName.equals("") || petBreed.equals("") || weightString.equals(""))  {
+                        Toast.makeText(this, "Enter all the details", Toast.LENGTH_SHORT).show();
 
-                    if (TextUtils.isEmpty(petName) && TextUtils.isEmpty(petBreed) && TextUtils.isEmpty(weightString)) {
-                        finish();
-                    } else if ((!TextUtils.isEmpty(petName) && !TextUtils.isEmpty(petBreed) && TextUtils.isEmpty(weightString))) {
-                        values.put(PetContract.PetEntry.PET_WEIGHT, 0);
+//                    if (TextUtils.isEmpty(petName) && TextUtils.isEmpty(petBreed) && TextUtils.isEmpty(weightString)) {
+//                        finish();
+                    }else{
+                        int petWeight = Integer.parseInt(weightString.trim());
+
+                        values.put(PetContract.PetEntry.PET_WEIGHT,petWeight);
                         values.put(PetContract.PetEntry.PET_NAME, petName);
                         values.put(PetContract.PetEntry.PET_BREED, petBreed);
                         values.put(PetContract.PetEntry.PET_GENDER, mGender);
+//                    } else if ((!TextUtils.isEmpty(petName) && !TextUtils.isEmpty(petBreed) && TextUtils.isEmpty(weightString))) {
+//                        values.put(PetContract.PetEntry.PET_WEIGHT, 0);
+//                        values.put(PetContract.PetEntry.PET_NAME, petName);
+//                        values.put(PetContract.PetEntry.PET_BREED, petBreed);
+//                        values.put(PetContract.PetEntry.PET_GENDER, mGender);
+//
+//
+////                database.insert(PetContract.PetEntry.TABLE_NAME,null,values);
+//                        getContentResolver().insert(PetContract.PetEntry.CONTENT_URI, values);
+//
+//                        Toast.makeText(this, "Pet Saved", Toast.LENGTH_SHORT).show();
+//
+//                        finish();
+//                    } else {
+//                        int petWeight = Integer.parseInt(mWeightEditText.getText().toString().trim());
+//
+//                        values.put(PetContract.PetEntry.PET_WEIGHT, petWeight);
+//                        values.put(PetContract.PetEntry.PET_NAME, petName);
+//                        values.put(PetContract.PetEntry.PET_BREED, petBreed);
+//                        values.put(PetContract.PetEntry.PET_GENDER, mGender);
 
 
 //                database.insert(PetContract.PetEntry.TABLE_NAME,null,values);
                         getContentResolver().insert(PetContract.PetEntry.CONTENT_URI, values);
-
                         Toast.makeText(this, "Pet Saved", Toast.LENGTH_SHORT).show();
-
-                        finish();
-                    } else {
-                        int petWeight = Integer.parseInt(mWeightEditText.getText().toString().trim());
-
-                        values.put(PetContract.PetEntry.PET_WEIGHT, petWeight);
-                        values.put(PetContract.PetEntry.PET_NAME, petName);
-                        values.put(PetContract.PetEntry.PET_BREED, petBreed);
-                        values.put(PetContract.PetEntry.PET_GENDER, mGender);
-
-
-//                database.insert(PetContract.PetEntry.TABLE_NAME,null,values);
-                        getContentResolver().insert(PetContract.PetEntry.CONTENT_URI, values);
-
-                        Toast.makeText(this, "Pet Saved", Toast.LENGTH_SHORT).show();
-
                         finish();
                     }
 //                PetDbHelper mDbHelper = new PetDbHelper(this);
@@ -206,22 +213,24 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
                 } else {
-                    String petName = mNameEditText.getText().toString().trim();
-                    String petBreed = mBreedEditText.getText().toString().trim();
+
                     int petWeight = Integer.parseInt(mWeightEditText.getText().toString().trim());
 
-                    ContentValues values = new ContentValues();
-                    values.put(PetContract.PetEntry.PET_NAME, petName);
-                    values.put(PetContract.PetEntry.PET_BREED, petBreed);
-                    values.put(PetContract.PetEntry.PET_GENDER, mGender);
-                    values.put(PetContract.PetEntry.PET_WEIGHT, petWeight);
+                    if(petName==null) {
+                        Toast.makeText(this, "Enter all the details", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        ContentValues values = new ContentValues();
+                        values.put(PetContract.PetEntry.PET_NAME, petName);
+                        values.put(PetContract.PetEntry.PET_BREED, petBreed);
+                        values.put(PetContract.PetEntry.PET_GENDER, mGender);
+                        values.put(PetContract.PetEntry.PET_WEIGHT, petWeight);
 
-                    int rowsUpdated = getContentResolver().update(uri, values, null, null);
+                        getContentResolver().update(uri, values, null, null);
 
-                    if (rowsUpdated == 0) {
-                        Toast.makeText(this, "Error while updating pet", Toast.LENGTH_SHORT).show();
-                    } else {
                         Toast.makeText(this, "Pet updated successfully", Toast.LENGTH_SHORT).show();
+
+                        finish();
                     }
 
                 }

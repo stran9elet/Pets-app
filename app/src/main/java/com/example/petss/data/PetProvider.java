@@ -78,9 +78,10 @@ public class PetProvider extends ContentProvider {
                 if (name == null ){
                     throw new IllegalArgumentException("Pet requires a name");
                 }
-                if (gender != PetContract.PetEntry.GENDER_MALE || gender != PetContract.PetEntry.GENDER_FEMALE || gender != PetContract.PetEntry.GENDER_UNKNOWN){
-                    values.put(PetContract.PetEntry.PET_GENDER,PetContract.PetEntry.GENDER_UNKNOWN);
-                }
+  //              if (gender != PetContract.PetEntry.GENDER_MALE || gender != PetContract.PetEntry.GENDER_FEMALE || gender != PetContract.PetEntry.GENDER_UNKNOWN)
+    //                gender=PetContract.PetEntry.GENDER_UNKNOWN;
+
+                values.put(PetContract.PetEntry.PET_GENDER,gender);
                 if (weight == null || Integer.valueOf(weight) < 0){
                     throw new IllegalArgumentException("Pet requires a valid weight");
                 }
@@ -105,13 +106,11 @@ public class PetProvider extends ContentProvider {
         SQLiteDatabase db = petDbHelper.getWritableDatabase();
         int rows;
 
-        if (!(values.containsKey(PetContract.PetEntry.PET_NAME))){
+        if (values.getAsString((PetContract.PetEntry.PET_NAME))==null){
             throw new IllegalArgumentException("Pet requires a name");
         }
-        if (values.containsKey(PetContract.PetEntry.PET_GENDER)){
-            throw new IllegalArgumentException("Pet requires a gender");
-        }
-        if (values.containsKey(PetContract.PetEntry.PET_WEIGHT)){
+
+        if (values.getAsInteger((PetContract.PetEntry.PET_WEIGHT))==null){
             throw new IllegalArgumentException("Pet requires a weight");
         }
 
